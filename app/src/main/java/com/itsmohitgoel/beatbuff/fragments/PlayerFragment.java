@@ -10,17 +10,16 @@ import android.view.ViewGroup;
 
 import com.itsmohitgoel.beatbuff.R;
 
-public class AlbumFragment extends Fragment {
+public class PlayerFragment extends Fragment {
+    public static PlayerFragment newInstance() {
+        return new PlayerFragment();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater
-                .inflate(R.layout.fragment_category, container, false);
-        return rootView;
-    }
-
-    public static AlbumFragment newInstance() {
-        return new AlbumFragment();
+        View view = inflater
+                .inflate(R.layout.fragment_container, container, false);
+        return view;
     }
 }

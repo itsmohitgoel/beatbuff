@@ -1,4 +1,4 @@
-package com.itsmohitgoel.beatbuff;
+package com.itsmohitgoel.beatbuff.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.itsmohitgoel.beatbuff.R;
 import com.itsmohitgoel.beatbuff.fragments.AlbumFragment;
 import com.itsmohitgoel.beatbuff.fragments.AllSongsFragment;
 import com.itsmohitgoel.beatbuff.fragments.ArtistFragment;

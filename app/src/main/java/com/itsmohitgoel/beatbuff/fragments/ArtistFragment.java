@@ -16,7 +16,7 @@ public class ArtistFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater
-                .inflate(R.layout.fragment_artist, container, false);
+                .inflate(R.layout.fragment_category, container, false);
         return rootView;
     }
 
