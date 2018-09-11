@@ -22,4 +22,5 @@ public class PlayerActivity extends SingleFragmentActivity {
         Intent intent = new Intent(packageContext, PlayerActivity.class);
         return intent;
     }
+
 }
