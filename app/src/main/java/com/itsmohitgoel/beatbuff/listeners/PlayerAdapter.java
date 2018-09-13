@@ -20,4 +20,8 @@ public interface PlayerAdapter {
     void initializeProgressCallback();
 
     void seekTo(int position);
+
+    void previous();
+
+    void next();
 }

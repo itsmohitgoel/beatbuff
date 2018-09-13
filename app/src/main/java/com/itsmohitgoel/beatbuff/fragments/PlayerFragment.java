@@ -20,8 +20,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.itsmohitgoel.beatbuff.R;
+import com.itsmohitgoel.beatbuff.listeners.PlaybackInfoListener;
 import com.itsmohitgoel.beatbuff.listeners.PlayerAdapter;
 import com.itsmohitgoel.beatbuff.utils.Blur;
+import com.itsmohitgoel.beatbuff.utils.CircularSeekBar;
 import com.itsmohitgoel.beatbuff.utils.MediaPlayerHolder;
 
 import butterknife.BindView;
@@ -32,25 +34,32 @@ public class PlayerFragment extends Fragment {
     private static final String TAG = PlayerFragment.class.getSimpleName();
 
     @BindView(R.id.google_cast_button)
-    ImageView googleCastButton;
+    ImageView mGoogleCastButton;
     @BindView(R.id.share_button)
-    ImageView shareButton;
+    ImageView mShareButton;
     @BindView(R.id.equalizer_button)
-    ImageView equalizerButton;
+    ImageView mEqualizerButton;
     @BindView(R.id.repeat_button)
-    ImageView repeatButton;
+    ImageView mRepeatButton;
     @BindView(R.id.shuffle_button)
-    ImageView shuffleButton;
+    ImageView mShuffleButton;
     @BindView(R.id.playlist_button)
-    ImageView playlistButton;
+    ImageView mPlaylistButton;
     @BindView(R.id.background_image_view)
-    ImageView backgroundImageView;
+    ImageView mBackgroundImageView;
     @BindView(R.id.circle_image_view)
-    CircleImageView profileImageView;
+    CircleImageView mProfileImageView;
     @BindView(R.id.play_button)
-    ImageView playButton;
+    ImageView mPlayButton;
+    @BindView(R.id.previous_button)
+    ImageView mPreviousButton;
+    @BindView(R.id.next_button)
+    ImageView mNextButton;
+    @BindView(R.id.circular_seekbar)
+    CircularSeekBar mCircularSeekBar;
 
     private PlayerAdapter mPlayerAdapter;
+    private boolean mUserIsSeeking = false;
 
 
     public static PlayerFragment newInstance() {
@@ -65,6 +74,7 @@ public class PlayerFragment extends Fragment {
                 .inflate(R.layout.fragment_player, container, false);
 
         initializeUI(view);
+        initializeSeekbar();
         initializePlaybackController();
 
         return view;
@@ -81,32 +91,39 @@ public class PlayerFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.google_cast_button:
-                    setBackgroundTint(googleCastButton.getDrawable());
+                    setBackgroundTint(mGoogleCastButton.getDrawable());
                     break;
 
                 case R.id.share_button:
-                    setBackgroundTint(shareButton.getDrawable());
+                    setBackgroundTint(mShareButton.getDrawable());
                     break;
 
                 case R.id.equalizer_button:
-                    setBackgroundTint(equalizerButton.getDrawable());
+                    setBackgroundTint(mEqualizerButton.getDrawable());
                     break;
 
                 case R.id.repeat_button:
-                    setBackgroundTint(repeatButton.getDrawable());
+                    setBackgroundTint(mRepeatButton.getDrawable());
                     break;
 
                 case R.id.shuffle_button:
-                    setBackgroundTint(shuffleButton.getDrawable());
+                    setBackgroundTint(mShuffleButton.getDrawable());
                     break;
 
                 case R.id.playlist_button:
-                    setBackgroundTint(playlistButton
+                    setBackgroundTint(mPlaylistButton
                             .getDrawable());
                     break;
 
                 case R.id.play_button:
                     mPlayerAdapter.play();
+
+                case R.id.previous_button:
+                    mPlayerAdapter.previous();
+                    break;
+                case R.id.next_button:
+                    mPlayerAdapter.next();
+                    break;
                 default:
                     break;
             }
@@ -122,20 +139,22 @@ public class PlayerFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         Bitmap albumArtImage = getAlbumArtImage(R.raw.cheap_thrills_by_sia);
-        profileImageView.setImageBitmap(albumArtImage);
+        mProfileImageView.setImageBitmap(albumArtImage);
 
         Bitmap albumArtBlurImage = Blur.fastblur(getActivity(), albumArtImage, 12);
         BitmapDrawable bitmapDrawable = new BitmapDrawable(albumArtBlurImage);
-        backgroundImageView.setImageBitmap(albumArtBlurImage);
-        backgroundImageView.setColorFilter(Blur.getGrayScaleFilter());
+        mBackgroundImageView.setImageBitmap(albumArtBlurImage);
+        mBackgroundImageView.setColorFilter(Blur.getGrayScaleFilter());
 
-        googleCastButton.setOnClickListener(controlButtonsListener);
-        shareButton.setOnClickListener(controlButtonsListener);
-        equalizerButton.setOnClickListener(controlButtonsListener);
-        repeatButton.setOnClickListener(controlButtonsListener);
-        shuffleButton.setOnClickListener(controlButtonsListener);
-        playlistButton.setOnClickListener(controlButtonsListener);
-        playButton.setOnClickListener(controlButtonsListener);
+        mGoogleCastButton.setOnClickListener(controlButtonsListener);
+        mShareButton.setOnClickListener(controlButtonsListener);
+        mEqualizerButton.setOnClickListener(controlButtonsListener);
+        mRepeatButton.setOnClickListener(controlButtonsListener);
+        mShuffleButton.setOnClickListener(controlButtonsListener);
+        mPlaylistButton.setOnClickListener(controlButtonsListener);
+        mPlayButton.setOnClickListener(controlButtonsListener);
+        mPreviousButton.setOnClickListener(controlButtonsListener);
+        mNextButton.setOnClickListener(controlButtonsListener);
     }
 
     /**
@@ -156,7 +175,50 @@ public class PlayerFragment extends Fragment {
 
     private void initializePlaybackController() {
         MediaPlayerHolder mediaPlayerHolder = new MediaPlayerHolder(getActivity());
+        mediaPlayerHolder.setPlaybackInfoListener(new PlaybackListener());
         Log.d(TAG, "initializePlaybackController: created MediaPlayerHolder");
         mPlayerAdapter = mediaPlayerHolder;
+    }
+
+    private void initializeSeekbar() {
+        mCircularSeekBar.setOnSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
+            int userSelectedPosition = 0;
+
+            @Override
+            public void onStartTrackingTouch(CircularSeekBar seekBar) {
+                mUserIsSeeking = true;
+            }
+
+            @Override
+            public void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    userSelectedPosition = progress;
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(CircularSeekBar seekBar) {
+                mUserIsSeeking = false;
+                mPlayerAdapter.seekTo(userSelectedPosition);
+            }
+        });
+    }
+
+    /**
+     * Callback listener to receive callback on events like progress change, seek position
+     */
+    public class PlaybackListener extends PlaybackInfoListener {
+        @Override
+        public void onDurationChanged(int duration) {
+            mCircularSeekBar.setMax(duration);
+        }
+
+        @Override
+        public void onPositionChanged(int position) {
+            if (!mUserIsSeeking) {
+                mCircularSeekBar.setProgress(position);
+            }
+        }
+
     }
 }

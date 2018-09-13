@@ -8,16 +8,18 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.itsmohitgoel.beatbuff.R;
+import com.itsmohitgoel.beatbuff.listeners.PlaybackInfoListener;
 import com.itsmohitgoel.beatbuff.listeners.PlayerAdapter;
 
 import java.io.IOException;
 
-public class MediaPlayerHolder implements PlayerAdapter{
+public class MediaPlayerHolder implements PlayerAdapter {
     private static final String TAG = MediaPlayerHolder.class.getSimpleName();
 
     private final Context mContext;
     private MediaPlayer mMediaPlayer;
     private int mResourceId;
+    private PlaybackInfoListener mPlaybackInfoListener;
 
     public MediaPlayerHolder(Context context) {
         mContext = context.getApplicationContext();
@@ -45,40 +47,67 @@ public class MediaPlayerHolder implements PlayerAdapter{
             Log.e(TAG, "Cannot prepare mMediaPlayer: prepare() failed", ioe);
         }
 
+        initializeProgressCallback();
     }
 
     @Override
     public void release() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
     }
 
     @Override
     public boolean isPlaying() {
+        if (mMediaPlayer != null) {
+            return mMediaPlayer.isPlaying();
+        }
         return false;
     }
 
     @Override
     public void play() {
-        mMediaPlayer.start();
+        if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
+            mMediaPlayer.start();
+        }
     }
 
     @Override
     public void pause() {
-
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+            Log.d(TAG, "playbackPause()");
+        }
     }
 
     @Override
     public void reset() {
-
-    }
-
-    @Override
-    public void initializeProgressCallback() {
-
+        if (mMediaPlayer != null) {
+            mMediaPlayer.reset();
+            loadMedia(mResourceId);
+        }
     }
 
     @Override
     public void seekTo(int position) {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.seekTo(position);
+        }
+    }
 
+    @Override
+    public void previous() {
+
+    }
+
+    @Override
+    public void next() {
+
+    }
+
+    public void setPlaybackInfoListener(PlaybackInfoListener playbackInfoListener) {
+        mPlaybackInfoListener = playbackInfoListener;
     }
 
     private void initializeMediaPlayer() {
@@ -88,4 +117,15 @@ public class MediaPlayerHolder implements PlayerAdapter{
             Log.i(TAG, "mMediaPlayer = new MediaPlayer()");
         }
     }
+
+    @Override
+    public void initializeProgressCallback() {
+        final int duration = mMediaPlayer.getDuration();
+        if (mPlaybackInfoListener != null) {
+            mPlaybackInfoListener.onDurationChanged(duration);
+            mPlaybackInfoListener.onPositionChanged(0);
+        }
+    }
+
+
 }
