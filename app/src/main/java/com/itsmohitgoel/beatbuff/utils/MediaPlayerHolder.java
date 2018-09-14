@@ -2,24 +2,29 @@ package com.itsmohitgoel.beatbuff.utils;
 
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
-import com.itsmohitgoel.beatbuff.R;
 import com.itsmohitgoel.beatbuff.listeners.PlaybackInfoListener;
 import com.itsmohitgoel.beatbuff.listeners.PlayerAdapter;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MediaPlayerHolder implements PlayerAdapter {
     private static final String TAG = MediaPlayerHolder.class.getSimpleName();
+
+    private static final int PLAYBACK_POSITION_REFRESH_INTERVAL_MS = 100;
 
     private final Context mContext;
     private MediaPlayer mMediaPlayer;
     private int mResourceId;
     private PlaybackInfoListener mPlaybackInfoListener;
+    private ScheduledExecutorService mExecutor;
+    private Runnable mSeekbarPositionUpdateTask;
 
     public MediaPlayerHolder(Context context) {
         mContext = context.getApplicationContext();
@@ -70,6 +75,7 @@ public class MediaPlayerHolder implements PlayerAdapter {
     public void play() {
         if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();
+            startUpdatingCallbackWithPosition();
         }
     }
 
@@ -79,10 +85,12 @@ public class MediaPlayerHolder implements PlayerAdapter {
             mMediaPlayer.pause();
             Log.d(TAG, "playbackPause()");
         }
+
     }
 
     @Override
     public void reset() {
+            Log.d(TAG, "reset()");
         if (mMediaPlayer != null) {
             mMediaPlayer.reset();
             loadMedia(mResourceId);
@@ -110,20 +118,72 @@ public class MediaPlayerHolder implements PlayerAdapter {
         mPlaybackInfoListener = playbackInfoListener;
     }
 
-    private void initializeMediaPlayer() {
-        if (mMediaPlayer == null) {
-            mMediaPlayer = new MediaPlayer();
-
-            Log.i(TAG, "mMediaPlayer = new MediaPlayer()");
-        }
-    }
-
     @Override
     public void initializeProgressCallback() {
+            Log.d(TAG, "initializeProgressCallback");
         final int duration = mMediaPlayer.getDuration();
         if (mPlaybackInfoListener != null) {
             mPlaybackInfoListener.onDurationChanged(duration);
             mPlaybackInfoListener.onPositionChanged(0);
+        }
+    }
+
+    private void initializeMediaPlayer() {
+        if (mMediaPlayer == null) {
+            mMediaPlayer = new MediaPlayer();
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    stopUpdatingCallbackWithPosition(true);
+                }
+            });
+
+            Log.d(TAG, "mMediaPlayer = new MediaPlayer()");
+        }
+    }
+
+    private void startUpdatingCallbackWithPosition() {
+        if (mExecutor == null) {
+            mExecutor = Executors.newSingleThreadScheduledExecutor();
+        }
+        if (mSeekbarPositionUpdateTask == null) {
+            mSeekbarPositionUpdateTask = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+
+                        updateProgressCallbackTask();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+        }
+        mExecutor.scheduleAtFixedRate(mSeekbarPositionUpdateTask,
+                0,
+                PLAYBACK_POSITION_REFRESH_INTERVAL_MS,
+                TimeUnit.MILLISECONDS);
+    }
+
+    private void updateProgressCallbackTask() {
+        Log.d(TAG, " updaeProgressCAllbackTAsk");
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            int currentPosition = mMediaPlayer.getCurrentPosition();
+            if (mPlaybackInfoListener != null) {
+                mPlaybackInfoListener.onPositionChanged(currentPosition);
+            }
+        }
+    }
+
+    private void stopUpdatingCallbackWithPosition(boolean resetUIPlayackPosition) {
+        Log.d(TAG, " stopUpdatingCallbackWithPosition(" + resetUIPlayackPosition + ")");
+        if (mExecutor != null) {
+            mExecutor.shutdownNow();
+            mExecutor = null;
+            mSeekbarPositionUpdateTask = null;
+            if (resetUIPlayackPosition && mPlaybackInfoListener != null) {
+                mPlaybackInfoListener.onPositionChanged(0);
+            }
         }
     }
 

@@ -49,8 +49,8 @@ public class PlayerFragment extends Fragment {
     ImageView mBackgroundImageView;
     @BindView(R.id.circle_image_view)
     CircleImageView mProfileImageView;
-    @BindView(R.id.play_button)
-    ImageView mPlayButton;
+    @BindView(R.id.play_pause_button)
+    ImageView mPlayPauseButton;
     @BindView(R.id.previous_button)
     ImageView mPreviousButton;
     @BindView(R.id.next_button)
@@ -86,6 +86,16 @@ public class PlayerFragment extends Fragment {
         mPlayerAdapter.loadMedia(R.raw.cheap_thrills_by_sia);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mPlayerAdapter.isPlaying()) {
+            //Do nothing
+        } else {
+            mPlayerAdapter.release();
+        }
+    }
+
     private View.OnClickListener controlButtonsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -115,7 +125,7 @@ public class PlayerFragment extends Fragment {
                             .getDrawable());
                     break;
 
-                case R.id.play_button:
+                case R.id.play_pause_button:
                     mPlayerAdapter.play();
 
                 case R.id.previous_button:
@@ -152,7 +162,7 @@ public class PlayerFragment extends Fragment {
         mRepeatButton.setOnClickListener(controlButtonsListener);
         mShuffleButton.setOnClickListener(controlButtonsListener);
         mPlaylistButton.setOnClickListener(controlButtonsListener);
-        mPlayButton.setOnClickListener(controlButtonsListener);
+        mPlayPauseButton.setOnClickListener(controlButtonsListener);
         mPreviousButton.setOnClickListener(controlButtonsListener);
         mNextButton.setOnClickListener(controlButtonsListener);
     }
@@ -214,9 +224,17 @@ public class PlayerFragment extends Fragment {
         }
 
         @Override
-        public void onPositionChanged(int position) {
+        public void onPositionChanged(final int position) {
             if (!mUserIsSeeking) {
-                mCircularSeekBar.setProgress(position);
+                Log.e(TAG, "onPositionChanged(position): " + position);
+
+                mCircularSeekBar.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCircularSeekBar.setProgress(position);
+
+                    }
+                });
             }
         }
 
