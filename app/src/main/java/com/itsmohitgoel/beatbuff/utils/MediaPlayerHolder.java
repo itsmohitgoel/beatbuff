@@ -93,7 +93,7 @@ public class MediaPlayerHolder implements PlayerAdapter {
             Log.d(TAG, "reset()");
         if (mMediaPlayer != null) {
             mMediaPlayer.reset();
-            loadMedia(mResourceId);
+//            loadMedia(mResourceId);
         }
     }
 
@@ -166,7 +166,7 @@ public class MediaPlayerHolder implements PlayerAdapter {
     }
 
     private void updateProgressCallbackTask() {
-        Log.d(TAG, " updaeProgressCAllbackTAsk");
+//        Log.d(TAG, " updaeProgressCAllbackTAsk");
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             int currentPosition = mMediaPlayer.getCurrentPosition();
             if (mPlaybackInfoListener != null) {

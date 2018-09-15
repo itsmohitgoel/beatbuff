@@ -3,11 +3,12 @@ package com.itsmohitgoel.beatbuff.fragments;
 import android.content.ContentUris;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,13 +19,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itsmohitgoel.beatbuff.R;
 import com.itsmohitgoel.beatbuff.listeners.PlaybackInfoListener;
 import com.itsmohitgoel.beatbuff.listeners.PlayerAdapter;
+import com.itsmohitgoel.beatbuff.models.MusicItem;
 import com.itsmohitgoel.beatbuff.utils.Blur;
 import com.itsmohitgoel.beatbuff.utils.CircularSeekBar;
 import com.itsmohitgoel.beatbuff.utils.MediaPlayerHolder;
+import com.itsmohitgoel.beatbuff.utils.MusicManager;
+import com.itsmohitgoel.beatbuff.utils.TimeConvertor;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +43,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PlayerFragment extends Fragment {
     private static final String TAG = PlayerFragment.class.getSimpleName();
 
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({Playback.PREVIOUS, Playback.CURRENT, Playback.NEXT})
+    @interface Playback {
+        int PREVIOUS = 0;
+        int CURRENT = 1;
+        int NEXT = 2;
+    }
+
     @BindView(R.id.google_cast_button)
     ImageView mGoogleCastButton;
+
     @BindView(R.id.share_button)
     ImageView mShareButton;
     @BindView(R.id.equalizer_button)
@@ -57,13 +76,36 @@ public class PlayerFragment extends Fragment {
     ImageView mNextButton;
     @BindView(R.id.circular_seekbar)
     CircularSeekBar mCircularSeekBar;
+    @BindView(R.id.current_time_text_view)
+    TextView mCurrentTimeTextView;
+    @BindView(R.id.total_time_text_view)
+    TextView mTotalTimeTextView;
 
     private PlayerAdapter mPlayerAdapter;
     private boolean mUserIsSeeking = false;
+    private ArrayList<MusicItem> mMusicItems;
+    private MusicItem mCurrentTrack;
+    private int mCurrentTrackIndex;
+    private boolean mShouldRepeat;
+    private boolean mShouldShuffle;
+    private boolean mShouldGoogleCast;
+    private boolean mShouldShare;
+    private boolean mOpenEqualizer;
+    private boolean mHasPlaylist;
+    private boolean mIsFavourite;
 
 
     public static PlayerFragment newInstance() {
         return new PlayerFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mMusicItems = MusicManager.getInstance().getMusicItems();
+        mCurrentTrackIndex = 0;
+        mCurrentTrack = mMusicItems.get(mCurrentTrackIndex);
     }
 
     @Nullable
@@ -83,7 +125,7 @@ public class PlayerFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mPlayerAdapter.loadMedia(R.raw.cheap_thrills_by_sia);
+//        mPlayerAdapter.loadMedia(mCurrentTrack.getResourceId());
     }
 
     @Override
@@ -96,65 +138,66 @@ public class PlayerFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPlayerAdapter.release();
+    }
+
     private View.OnClickListener controlButtonsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             switch (v.getId()) {
                 case R.id.google_cast_button:
-                    setBackgroundTint(mGoogleCastButton.getDrawable());
+                    mShouldGoogleCast = !mShouldGoogleCast;
+                    setBackgroundTint(mGoogleCastButton.getDrawable(), mShouldGoogleCast);
                     break;
-
                 case R.id.share_button:
-                    setBackgroundTint(mShareButton.getDrawable());
+                    mShouldShare = !mShouldShare;
+                    setBackgroundTint(mShareButton.getDrawable(), mShouldShare);
                     break;
-
                 case R.id.equalizer_button:
-                    setBackgroundTint(mEqualizerButton.getDrawable());
+                    mOpenEqualizer = !mOpenEqualizer;
+                    setBackgroundTint(mEqualizerButton.getDrawable(), mOpenEqualizer);
                     break;
-
                 case R.id.repeat_button:
-                    setBackgroundTint(mRepeatButton.getDrawable());
+                    mShouldRepeat = !mShouldRepeat;
+                    setBackgroundTint(mRepeatButton.getDrawable(), mShouldRepeat);
                     break;
-
                 case R.id.shuffle_button:
-                    setBackgroundTint(mShuffleButton.getDrawable());
+                    mShouldShuffle = !mShouldShuffle;
+                    setBackgroundTint(mShuffleButton.getDrawable(), mShouldShuffle);
                     break;
-
                 case R.id.playlist_button:
-                    setBackgroundTint(mPlaylistButton
-                            .getDrawable());
+                    mHasPlaylist = !mHasPlaylist;
+                    setBackgroundTint(mPlaylistButton.getDrawable(), mHasPlaylist);
                     break;
-
                 case R.id.play_pause_button:
-                    mPlayerAdapter.play();
-
+//                    mPlayerAdapter.play();
+                    playTrack(Playback.CURRENT);
                 case R.id.previous_button:
-                    mPlayerAdapter.previous();
+                    playTrack(Playback.PREVIOUS);
                     break;
                 case R.id.next_button:
-                    mPlayerAdapter.next();
+                    playTrack(Playback.NEXT);
                     break;
                 default:
                     break;
             }
         }
 
-        private void setBackgroundTint(Drawable drawable) {
+        private void setBackgroundTint(Drawable drawable, boolean isEnabled) {
+            int resId = isEnabled ? R.color.cyan_bright : R.color.matte_clay;
             DrawableCompat.setTint(drawable,
-                    ContextCompat.getColor(getActivity(), R.color.cyan_light));
+                    ContextCompat.getColor(getActivity(), resId));
         }
     };
 
     private void initializeUI(View view) {
         ButterKnife.bind(this, view);
 
-        Bitmap albumArtImage = getAlbumArtImage(R.raw.cheap_thrills_by_sia);
-        mProfileImageView.setImageBitmap(albumArtImage);
-
-        Bitmap albumArtBlurImage = Blur.fastblur(getActivity(), albumArtImage, 12);
-        BitmapDrawable bitmapDrawable = new BitmapDrawable(albumArtBlurImage);
-        mBackgroundImageView.setImageBitmap(albumArtBlurImage);
-        mBackgroundImageView.setColorFilter(Blur.getGrayScaleFilter());
+        updateUI();
 
         mGoogleCastButton.setOnClickListener(controlButtonsListener);
         mShareButton.setOnClickListener(controlButtonsListener);
@@ -165,6 +208,15 @@ public class PlayerFragment extends Fragment {
         mPlayPauseButton.setOnClickListener(controlButtonsListener);
         mPreviousButton.setOnClickListener(controlButtonsListener);
         mNextButton.setOnClickListener(controlButtonsListener);
+    }
+
+    private void updateUI() {
+        Bitmap albumArtImage = getAlbumArtImage(mCurrentTrack.getResourceId());
+        mProfileImageView.setImageBitmap(albumArtImage);
+
+        Bitmap albumArtBlurImage = Blur.fastblur(getActivity(), albumArtImage, 12);
+        mBackgroundImageView.setImageBitmap(albumArtBlurImage);
+        mBackgroundImageView.setColorFilter(Blur.getGrayScaleFilter());
     }
 
     /**
@@ -214,6 +266,39 @@ public class PlayerFragment extends Fragment {
         });
     }
 
+    private void playTrack(@Playback int trackNumber) {
+        switch (trackNumber) {
+            case Playback.PREVIOUS:
+                if (--mCurrentTrackIndex < 0) {
+                    Toast.makeText(getActivity(), "You are currently listening to first track!",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                mCurrentTrack = mMusicItems.get(mCurrentTrackIndex);
+                mPlayerAdapter.reset();
+                break;
+
+            case Playback.CURRENT:
+//                mPlayerAdapter.play();
+                break;
+            case Playback.NEXT:
+                if (++mCurrentTrackIndex >= mMusicItems.size()) {
+                    Toast.makeText(getActivity(), "There is no track remaining in current playlist",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                mCurrentTrack = mMusicItems.get(mCurrentTrackIndex);
+                mPlayerAdapter.reset();
+                break;
+        }
+
+        mPlayerAdapter.loadMedia(mCurrentTrack.getResourceId());
+        updateUI();
+        mPlayerAdapter.play();
+
+
+    }
+
     /**
      * Callback listener to receive callback on events like progress change, seek position
      */
@@ -221,17 +306,20 @@ public class PlayerFragment extends Fragment {
         @Override
         public void onDurationChanged(int duration) {
             mCircularSeekBar.setMax(duration);
+            mTotalTimeTextView.setText(TimeConvertor.milliSecondsToTimer(duration));
         }
 
         @Override
         public void onPositionChanged(final int position) {
             if (!mUserIsSeeking) {
-                Log.e(TAG, "onPositionChanged(position): " + position);
+//                Log.e(TAG, "onPositionChanged(position): " + position);
 
                 mCircularSeekBar.post(new Runnable() {
                     @Override
                     public void run() {
                         mCircularSeekBar.setProgress(position);
+//                        Log.d(TAG, position + "ms to sec " + TimeConvertor.milliSecondsToTimer(position));
+                        mCurrentTimeTextView.setText(TimeConvertor.milliSecondsToTimer(position));
 
                     }
                 });

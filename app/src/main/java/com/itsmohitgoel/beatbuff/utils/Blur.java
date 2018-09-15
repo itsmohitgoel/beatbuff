@@ -242,8 +242,14 @@ public class Blur {
     }
 
     public static ColorMatrixColorFilter getGrayScaleFilter() {
-        ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);
-        return new ColorMatrixColorFilter(matrix);
+        float brightness = (float)(200 - 255);
+        float[] colorMatrix = {
+
+                0.33f, 0.33f, 0.33f, 0, brightness, //red
+                0.33f, 0.33f, 0.33f, 0, brightness, //green
+                0.33f, 0.33f, 0.33f, 0, brightness, //blue
+                0, 0, 0, 1, 0    //alpha
+        };
+        return new ColorMatrixColorFilter(colorMatrix);
     }
 }

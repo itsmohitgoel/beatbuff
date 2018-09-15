@@ -5,6 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     
     <color name="cyan_dark">#0097A7</color>
-    <color name="cyan_light">#3ce4f5</color>
+    <color name="cyan_bright">#26c6da</color>
+    <color name="cyan_dull">#26c6da</color>
     <color name="matte_clay">#828282</color>
+    <color name="zero_opacity">#00828282</color>
+    <color name="white">#ebecec</color>
 </resources>

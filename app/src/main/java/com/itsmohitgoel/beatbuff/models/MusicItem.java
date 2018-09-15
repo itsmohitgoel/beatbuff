@@ -1,5 +1,7 @@
 package com.itsmohitgoel.beatbuff.models;
 
+import android.net.Uri;
+
 import java.util.UUID;
 
 public class MusicItem {
@@ -10,6 +12,7 @@ public class MusicItem {
     private String mPlaylist;
     private String mThumbnailImageId;
     private short mDuration;
+    private int mResourceId;
 
 
     public MusicItem() {
@@ -66,5 +69,13 @@ public class MusicItem {
 
     public void setDuration(short duration) {
         mDuration = duration;
+    }
+
+    public int getResourceId() {
+        return mResourceId;
+    }
+
+    public void setResourceId(int resourceId) {
+        mResourceId = resourceId;
     }
 }
