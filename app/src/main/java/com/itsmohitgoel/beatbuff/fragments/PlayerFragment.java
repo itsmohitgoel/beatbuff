@@ -214,7 +214,7 @@ public class PlayerFragment extends Fragment {
         Bitmap albumArtImage = getAlbumArtImage(mCurrentTrack.getResourceId());
         mProfileImageView.setImageBitmap(albumArtImage);
 
-        Bitmap albumArtBlurImage = Blur.fastblur(getActivity(), albumArtImage, 12);
+        Bitmap albumArtBlurImage = Blur.fastblur(getActivity(), albumArtImage, 5);
         mBackgroundImageView.setImageBitmap(albumArtBlurImage);
         mBackgroundImageView.setColorFilter(Blur.getGrayScaleFilter());
     }

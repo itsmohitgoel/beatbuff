@@ -14,6 +14,7 @@ import com.itsmohitgoel.beatbuff.adapters.CategoriesDataAdapter;
 import com.itsmohitgoel.beatbuff.R;
 import com.itsmohitgoel.beatbuff.models.CategoryDataModel;
 import com.itsmohitgoel.beatbuff.models.CategorySingleItemModel;
+import com.itsmohitgoel.beatbuff.utils.MusicManager;
 
 import java.util.ArrayList;
 
@@ -59,10 +60,30 @@ public class HomeFragment extends Fragment {
 
     private void createDummyData() {
         for (int i = 1; i <= 5; i++) {
+
+            if (i == 1) {
+                CategoryDataModel genreData = MusicManager.getInstance().getAllGenreData();
+                mAllCategoriesData.add(genreData);
+                continue;
+            }if (i == 2) {
+                CategoryDataModel artistData = MusicManager.getInstance().getAllArtistData();
+                mAllCategoriesData.add(artistData);
+                continue;
+            }if (i == 3) {
+                CategoryDataModel albumsData = MusicManager.getInstance().getAllAlbumsData();
+                mAllCategoriesData.add(albumsData);
+                continue;
+            }if (i == 4) {
+                CategoryDataModel allSongsData = MusicManager.getInstance().getAllSongsData();
+                mAllCategoriesData.add(allSongsData);
+                continue;
+            }
+
             CategoryDataModel categoryDataModel = new CategoryDataModel();
             categoryDataModel.setHeaderTitle("Section " + i);
 
             ArrayList<CategorySingleItemModel> singleItemsList = new ArrayList<>();
+
             for (int j = 0; j <= 5; j++) {
                 singleItemsList.add(new CategorySingleItemModel("Item " + j, R.drawable.alan_walker));
             }

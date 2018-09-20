@@ -1,6 +1,7 @@
 package com.itsmohitgoel.beatbuff.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ public class CategoryListDataAdapter extends RecyclerView.Adapter<CategoryListDa
 
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.thumbnail_image_view)
-        ImageView mItemImage;
+        ImageView mThumbnailImageView;
         @BindView(R.id.title_text_view)
         TextView mTitleTextView;
 
@@ -59,7 +60,8 @@ public class CategoryListDataAdapter extends RecyclerView.Adapter<CategoryListDa
 
         public void bindCategorySingleItemData(CategorySingleItemModel singleItem) {
             mTitleTextView.setText(singleItem.getName());
-//            mItemImage.setImageDrawable(singleItem.getImageResId());
+            Drawable imageDrawable = mContext.getResources().getDrawable(singleItem.getImageResId());
+            mThumbnailImageView.setImageDrawable(imageDrawable);
 
             this.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

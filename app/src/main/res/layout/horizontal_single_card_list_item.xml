@@ -18,7 +18,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_gravity="center_horizontal"
-            android:scaleType="fitCenter"
+            android:scaleType="fitXY"
             android:src="@drawable/alan_walker" />
 
     </android.support.v7.widget.CardView>
@@ -27,7 +27,7 @@
         android:id="@+id/title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
+        android:layout_marginLeft="8dp"
         android:text="Sample title"
         android:textSize="16sp" />
 </LinearLayout>

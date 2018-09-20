@@ -21,7 +21,4 @@ public class CategorySingleItemModel {
         return imageResId;
     }
 
-    public void setImageResId(int imageResId) {
-        this.imageResId = imageResId;
-    }
 }
