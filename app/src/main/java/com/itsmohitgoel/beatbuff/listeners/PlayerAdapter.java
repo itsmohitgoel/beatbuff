@@ -1,11 +1,13 @@
 package com.itsmohitgoel.beatbuff.listeners;
 
+import com.itsmohitgoel.beatbuff.models.MusicItem;
+
 /**
  * Allows @PlayerActivity to control media playback of @MediaPlayerHolder.
  */
 public interface PlayerAdapter {
 
-    void loadMedia(int resourceId);
+    void loadMedia(MusicItem musicItem);
 
     void release();
 

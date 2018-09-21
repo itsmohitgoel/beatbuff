@@ -1,5 +1,11 @@
 package com.itsmohitgoel.beatbuff.utils;
 
+import android.content.ContentUris;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.util.Log;
 
 import com.itsmohitgoel.beatbuff.R;
@@ -9,23 +15,25 @@ import com.itsmohitgoel.beatbuff.models.MusicItem;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class MusicManager {
     private static final String TAG = MusicManager.class.getSimpleName();
+
     private static MusicManager sMusicManager;
     private ArrayList<MusicItem> mMusicItems;
+    private Context mContext;
 
-    public static MusicManager getInstance() {
+    public static MusicManager getInstance(Context context) {
         if (sMusicManager == null) {
-            sMusicManager = new MusicManager();
+            sMusicManager = new MusicManager(context);
         }
 
         return sMusicManager;
     }
 
-    private MusicManager() {
+    private MusicManager(Context context) {
+        mContext = context;
         mMusicItems = new ArrayList<>();
 
     }
@@ -35,7 +43,7 @@ public class MusicManager {
 
         for (int resId : resIds) {
             MusicItem musicItem = new MusicItem();
-            musicItem.setResourceId(resId);
+            addMetadataInfo(musicItem, resId);
             mMusicItems.add(musicItem);
 
         }
@@ -50,26 +58,6 @@ public class MusicManager {
             }
         }
         return null;
-    }
-
-    /**
-     * Retrieve all mp3 files from res/raw folder at once during runtime
-     */
-    private int[] getAllRawMusicResourceIds() {
-        Field[] fields = R.raw.class.getDeclaredFields();
-        int[] ids = new int[fields.length];
-        R.raw r = new R.raw();
-
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            try {
-                ids[i] = field.getInt(r);
-            } catch (IllegalAccessException iae) {
-                Log.d(TAG, "cannot access int id from R file", iae);
-            }
-        }
-
-        return ids;
     }
 
     public void loadAllMusicData(ArrayList<CategoryDataModel> allCategoriesData) {
@@ -163,4 +151,66 @@ public class MusicManager {
 
         return allSongsDataModel;
     }
+
+    /**
+     * Retrieve all mp3 files from res/raw folder at once during runtime
+     */
+    private int[] getAllRawMusicResourceIds() {
+        Field[] fields = R.raw.class.getDeclaredFields();
+        int[] ids = new int[fields.length];
+        R.raw r = new R.raw();
+
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+            try {
+                ids[i] = field.getInt(r);
+            } catch (IllegalAccessException iae) {
+                Log.d(TAG, "cannot access int id from R file", iae);
+            }
+        }
+
+        return ids;
+    }
+
+    private void addMetadataInfo(MusicItem musicItem, int resourceId) {
+        Uri baseUriForAudioFiles = Uri.parse("android.resource://" + mContext.getPackageName() + "/raw");
+        Uri uri = ContentUris.withAppendedId(baseUriForAudioFiles, resourceId);
+
+        MediaMetadataRetriever mData = new MediaMetadataRetriever();
+        mData.setDataSource(mContext, uri);
+        String artist = mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        String duration = mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        duration = TimeConvertor.milliSecondsToTimer(Integer.parseInt(duration));
+        String title = mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        byte art[] = mData.getEmbeddedPicture();
+        Bitmap coverImage = BitmapFactory.decodeByteArray(art, 0, art.length);
+
+        musicItem.setTitle(title);
+        musicItem.setArtistName(artist);
+        musicItem.setDuration(duration);
+        musicItem.setCoverArt(coverImage);
+        musicItem.setUriPath(uri);
+
+        Log.i(TAG, String.format("Artist : [%s];\t\t Duration : [%s]; \t\t Title : [%s]",
+                artist, duration, title));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

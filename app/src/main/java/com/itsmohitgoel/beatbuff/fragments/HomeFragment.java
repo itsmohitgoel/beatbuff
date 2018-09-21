@@ -62,19 +62,19 @@ public class HomeFragment extends Fragment {
         for (int i = 1; i <= 5; i++) {
 
             if (i == 1) {
-                CategoryDataModel genreData = MusicManager.getInstance().getAllGenreData();
+                CategoryDataModel genreData = MusicManager.getInstance(getActivity()).getAllGenreData();
                 mAllCategoriesData.add(genreData);
                 continue;
             }if (i == 2) {
-                CategoryDataModel artistData = MusicManager.getInstance().getAllArtistData();
+                CategoryDataModel artistData = MusicManager.getInstance(getActivity()).getAllArtistData();
                 mAllCategoriesData.add(artistData);
                 continue;
             }if (i == 3) {
-                CategoryDataModel albumsData = MusicManager.getInstance().getAllAlbumsData();
+                CategoryDataModel albumsData = MusicManager.getInstance(getActivity()).getAllAlbumsData();
                 mAllCategoriesData.add(albumsData);
                 continue;
             }if (i == 4) {
-                CategoryDataModel allSongsData = MusicManager.getInstance().getAllSongsData();
+                CategoryDataModel allSongsData = MusicManager.getInstance(getActivity()).getAllSongsData();
                 mAllCategoriesData.add(allSongsData);
                 continue;
             }

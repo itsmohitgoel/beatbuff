@@ -1,5 +1,6 @@
 package com.itsmohitgoel.beatbuff.models;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import java.util.UUID;
@@ -8,11 +9,9 @@ public class MusicItem {
     private UUID mId;
     private String mTitle;
     private String mArtistName;
-    private String mAlbumName;
-    private String mPlaylist;
-    private String mThumbnailImageId;
-    private short mDuration;
-    private int mResourceId;
+    private Bitmap mCoverArt;
+    private String mDuration;
+    private Uri mUriPath;
 
 
     public MusicItem() {
@@ -39,43 +38,27 @@ public class MusicItem {
         mArtistName = artistName;
     }
 
-    public String getAlbumName() {
-        return mAlbumName;
+    public Bitmap getCoverArt() {
+        return mCoverArt;
     }
 
-    public void setAlbumName(String albumName) {
-        mAlbumName = albumName;
+    public void setCoverArt(Bitmap coverArt) {
+        mCoverArt = coverArt;
     }
 
-    public String getPlaylist() {
-        return mPlaylist;
-    }
-
-    public void setPlaylist(String playlist) {
-        mPlaylist = playlist;
-    }
-
-    public String getThumbnailImageId() {
-        return mThumbnailImageId;
-    }
-
-    public void setThumbnailImageId(String thumbnailImageId) {
-        mThumbnailImageId = thumbnailImageId;
-    }
-
-    public short getDuration() {
+    public String getDuration() {
         return mDuration;
     }
 
-    public void setDuration(short duration) {
+    public void setDuration(String duration) {
         mDuration = duration;
     }
 
-    public int getResourceId() {
-        return mResourceId;
+    public Uri getUriPath() {
+        return mUriPath;
     }
 
-    public void setResourceId(int resourceId) {
-        mResourceId = resourceId;
+    public void setUriPath(Uri uriPath) {
+        mUriPath = uriPath;
     }
 }

@@ -103,7 +103,7 @@ public class PlayerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mMusicItems = MusicManager.getInstance().getMusicItems();
+        mMusicItems = MusicManager.getInstance(getActivity()).getMusicItems();
         mCurrentTrackIndex = 0;
         mCurrentTrack = mMusicItems.get(mCurrentTrackIndex);
     }
@@ -211,28 +211,12 @@ public class PlayerFragment extends Fragment {
     }
 
     private void updateUI() {
-        Bitmap albumArtImage = getAlbumArtImage(mCurrentTrack.getResourceId());
+        Bitmap albumArtImage = mCurrentTrack.getCoverArt();
         mProfileImageView.setImageBitmap(albumArtImage);
 
         Bitmap albumArtBlurImage = Blur.fastblur(getActivity(), albumArtImage, 5);
         mBackgroundImageView.setImageBitmap(albumArtBlurImage);
         mBackgroundImageView.setColorFilter(Blur.getGrayScaleFilter());
-    }
-
-    /**
-     * Extract the Album cover from the audio resource file itself
-     */
-    private Bitmap getAlbumArtImage(long resId) {
-        Uri baseUriForAudioFiles = Uri.parse("android.resource://" + getActivity().getPackageName() + "/raw");
-        Uri uri = ContentUris.withAppendedId(baseUriForAudioFiles, resId);
-        Bitmap image;
-
-        MediaMetadataRetriever mData = new MediaMetadataRetriever();
-        mData.setDataSource(getActivity(), uri);
-        byte art[] = mData.getEmbeddedPicture();
-        image = BitmapFactory.decodeByteArray(art, 0, art.length);
-
-        return image;
     }
 
     private void initializePlaybackController() {
@@ -292,7 +276,7 @@ public class PlayerFragment extends Fragment {
                 break;
         }
 
-        mPlayerAdapter.loadMedia(mCurrentTrack.getResourceId());
+        mPlayerAdapter.loadMedia(mCurrentTrack);
         updateUI();
         mPlayerAdapter.play();
 

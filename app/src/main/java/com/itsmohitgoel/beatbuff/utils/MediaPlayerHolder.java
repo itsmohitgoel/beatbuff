@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.itsmohitgoel.beatbuff.listeners.PlaybackInfoListener;
 import com.itsmohitgoel.beatbuff.listeners.PlayerAdapter;
+import com.itsmohitgoel.beatbuff.models.MusicItem;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -21,7 +22,6 @@ public class MediaPlayerHolder implements PlayerAdapter {
 
     private final Context mContext;
     private MediaPlayer mMediaPlayer;
-    private int mResourceId;
     private PlaybackInfoListener mPlaybackInfoListener;
     private ScheduledExecutorService mExecutor;
     private Runnable mSeekbarPositionUpdateTask;
@@ -31,16 +31,12 @@ public class MediaPlayerHolder implements PlayerAdapter {
     }
 
     @Override
-    public void loadMedia(int resourceId) {
-        mResourceId = resourceId;
-
+    public void loadMedia(MusicItem musicItem) {
         initializeMediaPlayer();
 
-        Uri baseUriForAudioFiles = Uri.parse("android.resource://" + mContext.getPackageName() + "/raw");
-        Uri uri = ContentUris.withAppendedId(baseUriForAudioFiles, mResourceId);
         try {
             Log.i(TAG, "load() {1. setDataSource}");
-            mMediaPlayer.setDataSource(mContext, uri);
+            mMediaPlayer.setDataSource(mContext, musicItem.getUriPath());
         } catch (IOException ioe) {
             Log.e(TAG, "Cannot load data source in player: setDataSource() failed", ioe);
         }
