@@ -8,8 +8,10 @@
     <color name="cyan_bright">#26c6da</color>
     <color name="cyan_dull">#26c6da</color>
     <color name="matte_clay">#828282</color>
+    <color name="matte_clay_dull">#a0828282</color>
+    <color name="matte_clay_dim">#54828282</color>
     <color name="zero_opacity">#00828282</color>
     <color name="white">#ebecec</color>
     <color name="orange_dark">#be6d20</color>
-    <color name="black_dark">#000000</color>
+    <color name="black_dark">#121314</color>
 </resources>

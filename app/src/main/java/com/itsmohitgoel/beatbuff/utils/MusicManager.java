@@ -39,6 +39,10 @@ public class MusicManager {
     }
 
     public ArrayList<MusicItem> getMusicItems() {
+        if (mMusicItems != null && mMusicItems.size() > 0) {
+            return mMusicItems;
+        }
+
         int[] resIds = getAllRawMusicResourceIds();
 
         for (int resId : resIds) {

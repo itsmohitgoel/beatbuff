@@ -3,8 +3,12 @@ package com.itsmohitgoel.beatbuff.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -13,6 +17,8 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 /**
  * Created by MOHGOEL on 08-June-18.
@@ -242,7 +248,7 @@ public class Blur {
     }
 
     public static ColorMatrixColorFilter getGrayScaleFilter() {
-        float brightness = (float)(200 - 255);
+        float brightness = (float) (200 - 255);
         float[] colorMatrix = {
 
                 0.33f, 0.33f, 0.33f, 0, brightness, //red
@@ -252,4 +258,19 @@ public class Blur {
         };
         return new ColorMatrixColorFilter(colorMatrix);
     }
+
+    public static Bitmap mergeMultiple(ArrayList<Bitmap> bitmaps) {
+
+        Bitmap result = Bitmap.createBitmap(bitmaps.get(0).getWidth() * 2,
+                bitmaps.get(0).getHeight() * 2, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(result);
+        Paint paint = new Paint();
+        for (int i = 0; i < bitmaps.size(); i++) {
+            canvas.drawBitmap(bitmaps.get(i), bitmaps.get(i).getWidth() * (i % 2),
+                    bitmaps.get(i).getHeight() * (i / 2), paint);
+        }
+        return result;
+    }
+
 }
