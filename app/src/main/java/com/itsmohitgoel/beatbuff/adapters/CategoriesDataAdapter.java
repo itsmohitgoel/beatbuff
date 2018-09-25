@@ -2,6 +2,8 @@ package com.itsmohitgoel.beatbuff.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v4.app.Fragment;
 
 import com.itsmohitgoel.beatbuff.R;
+import com.itsmohitgoel.beatbuff.fragments.CategoryListFragment;
 import com.itsmohitgoel.beatbuff.models.CategoryDataModel;
 
 import java.util.ArrayList;
@@ -68,7 +72,7 @@ public class CategoriesDataAdapter extends RecyclerView.Adapter<CategoriesDataAd
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindCategoryData(CategoryDataModel categoryData) {
+        public void bindCategoryData(final CategoryDataModel categoryData) {
             final String sectionName = categoryData.getHeaderTitle();
             ArrayList singleSectionItems = categoryData.getAllItemsInCategory();
 
@@ -78,6 +82,15 @@ public class CategoriesDataAdapter extends RecyclerView.Adapter<CategoriesDataAd
                 public void onClick(View v) {
                     Toast.makeText(mContext, "Click even on SeeAll, " + sectionName,
                             Toast.LENGTH_SHORT).show();
+                    Fragment fragment = CategoryListFragment
+                            .newInstance(categoryData.getMusicCategory());
+
+                    FragmentManager fragmentManager = ((AppCompatActivity) mContext)
+                            .getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
 

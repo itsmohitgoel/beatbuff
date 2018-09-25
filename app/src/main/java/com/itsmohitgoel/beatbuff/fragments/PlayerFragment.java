@@ -1,13 +1,8 @@
 package com.itsmohitgoel.beatbuff.fragments;
 
-import android.content.ContentUris;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -53,7 +48,6 @@ public class PlayerFragment extends Fragment {
 
     @BindView(R.id.google_cast_button)
     ImageView mGoogleCastButton;
-
     @BindView(R.id.share_button)
     ImageView mShareButton;
     @BindView(R.id.equalizer_button)
@@ -64,6 +58,8 @@ public class PlayerFragment extends Fragment {
     ImageView mShuffleButton;
     @BindView(R.id.playlist_button)
     ImageView mPlaylistButton;
+    @BindView(R.id.favourite_button)
+    ImageView mFavouriteButton;
     @BindView(R.id.background_image_view)
     ImageView mBackgroundImageView;
     @BindView(R.id.circle_image_view)
@@ -80,6 +76,18 @@ public class PlayerFragment extends Fragment {
     TextView mCurrentTimeTextView;
     @BindView(R.id.total_time_text_view)
     TextView mTotalTimeTextView;
+    @BindView(R.id.track_title_text_view)
+    TextView mTrackTitleTextView;
+    @BindView(R.id.track_info_text_view)
+    TextView mTrackInfoTextView;
+    @BindView(R.id.previous_track_title_text_view)
+    TextView mPreviousTrackTitleTextView;
+    @BindView(R.id.previous_track_info_text_view)
+    TextView mPreviousTrackInfoTextView;
+    @BindView(R.id.next_track_title_text_view)
+    TextView mNextTrackTitleTextView;
+    @BindView(R.id.next_track_info_text_view)
+    TextView mNextTrackInfoTextView;
 
     private PlayerAdapter mPlayerAdapter;
     private boolean mUserIsSeeking = false;
@@ -93,6 +101,7 @@ public class PlayerFragment extends Fragment {
     private boolean mOpenEqualizer;
     private boolean mHasPlaylist;
     private boolean mIsFavourite;
+    private boolean mIsPlaying = false;
 
 
     public static PlayerFragment newInstance() {
@@ -125,7 +134,7 @@ public class PlayerFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        mPlayerAdapter.loadMedia(mCurrentTrack.getResourceId());
+        mPlayerAdapter.loadMedia(mCurrentTrack);
     }
 
     @Override
@@ -151,31 +160,36 @@ public class PlayerFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.google_cast_button:
                     mShouldGoogleCast = !mShouldGoogleCast;
-                    setBackgroundTint(mGoogleCastButton.getDrawable(), mShouldGoogleCast);
+                    toggleBackgroundTint(mGoogleCastButton.getDrawable(), mShouldGoogleCast);
                     break;
                 case R.id.share_button:
                     mShouldShare = !mShouldShare;
-                    setBackgroundTint(mShareButton.getDrawable(), mShouldShare);
+                    toggleBackgroundTint(mShareButton.getDrawable(), mShouldShare);
                     break;
                 case R.id.equalizer_button:
                     mOpenEqualizer = !mOpenEqualizer;
-                    setBackgroundTint(mEqualizerButton.getDrawable(), mOpenEqualizer);
+                    toggleBackgroundTint(mEqualizerButton.getDrawable(), mOpenEqualizer);
                     break;
                 case R.id.repeat_button:
                     mShouldRepeat = !mShouldRepeat;
-                    setBackgroundTint(mRepeatButton.getDrawable(), mShouldRepeat);
+                    toggleBackgroundTint(mRepeatButton.getDrawable(), mShouldRepeat);
                     break;
                 case R.id.shuffle_button:
                     mShouldShuffle = !mShouldShuffle;
-                    setBackgroundTint(mShuffleButton.getDrawable(), mShouldShuffle);
+                    toggleBackgroundTint(mShuffleButton.getDrawable(), mShouldShuffle);
                     break;
                 case R.id.playlist_button:
                     mHasPlaylist = !mHasPlaylist;
-                    setBackgroundTint(mPlaylistButton.getDrawable(), mHasPlaylist);
+                    toggleBackgroundTint(mPlaylistButton.getDrawable(), mHasPlaylist);
+                    break;
+                case R.id.favourite_button:
+                    mIsFavourite = !mIsFavourite;
+                    int resId = mIsFavourite ? R.drawable.ic_liked : R.drawable.ic_like;
+                    mFavouriteButton.setImageResource(resId);
                     break;
                 case R.id.play_pause_button:
-//                    mPlayerAdapter.play();
                     playTrack(Playback.CURRENT);
+                    break;
                 case R.id.previous_button:
                     playTrack(Playback.PREVIOUS);
                     break;
@@ -187,7 +201,7 @@ public class PlayerFragment extends Fragment {
             }
         }
 
-        private void setBackgroundTint(Drawable drawable, boolean isEnabled) {
+        private void toggleBackgroundTint(Drawable drawable, boolean isEnabled) {
             int resId = isEnabled ? R.color.cyan_bright : R.color.matte_clay;
             DrawableCompat.setTint(drawable,
                     ContextCompat.getColor(getActivity(), resId));
@@ -205,6 +219,7 @@ public class PlayerFragment extends Fragment {
         mRepeatButton.setOnClickListener(controlButtonsListener);
         mShuffleButton.setOnClickListener(controlButtonsListener);
         mPlaylistButton.setOnClickListener(controlButtonsListener);
+        mFavouriteButton.setOnClickListener(controlButtonsListener);
         mPlayPauseButton.setOnClickListener(controlButtonsListener);
         mPreviousButton.setOnClickListener(controlButtonsListener);
         mNextButton.setOnClickListener(controlButtonsListener);
@@ -217,6 +232,39 @@ public class PlayerFragment extends Fragment {
         Bitmap albumArtBlurImage = Blur.fastblur(getActivity(), albumArtImage, 5);
         mBackgroundImageView.setImageBitmap(albumArtBlurImage);
         mBackgroundImageView.setColorFilter(Blur.getGrayScaleFilter());
+
+        mTrackTitleTextView.setText(mCurrentTrack.getTitle());
+        mTrackInfoTextView.setText(mCurrentTrack.getArtistName());
+
+        if (mCurrentTrackIndex == 0) {
+            mPreviousTrackInfoTextView.setVisibility(View.GONE);
+            mPreviousTrackTitleTextView.setVisibility(View.GONE);
+
+            mNextTrackTitleTextView.setVisibility(View.VISIBLE);
+            mNextTrackInfoTextView.setVisibility(View.VISIBLE);
+        }else if (mCurrentTrackIndex == (mMusicItems.size() - 1)) {
+            mPreviousTrackInfoTextView.setVisibility(View.VISIBLE);
+            mPreviousTrackTitleTextView.setVisibility(View.VISIBLE);
+
+            mNextTrackTitleTextView.setVisibility(View.GONE);
+            mNextTrackInfoTextView.setVisibility(View.GONE);
+        } else {
+            mPreviousTrackTitleTextView.setText(mMusicItems.get(mCurrentTrackIndex - 1).getTitle());
+            mPreviousTrackInfoTextView.setText(mMusicItems.get(mCurrentTrackIndex - 1).getArtistName());
+
+            mNextTrackTitleTextView.setText(mMusicItems.get(mCurrentTrackIndex + 1).getTitle());
+            mNextTrackInfoTextView.setText(mMusicItems.get(mCurrentTrackIndex + 1).getArtistName());
+
+            mPreviousTrackInfoTextView.setVisibility(View.VISIBLE);
+            mPreviousTrackTitleTextView.setVisibility(View.VISIBLE);
+
+            mNextTrackTitleTextView.setVisibility(View.VISIBLE);
+            mNextTrackInfoTextView.setVisibility(View.VISIBLE);
+        }
+
+        int resID = mIsPlaying ? R.drawable.ic_pause_circle : R.drawable.ic_play_circle;
+        mPlayPauseButton.setImageResource(resID);
+
     }
 
     private void initializePlaybackController() {
@@ -253,34 +301,40 @@ public class PlayerFragment extends Fragment {
     private void playTrack(@Playback int trackNumber) {
         switch (trackNumber) {
             case Playback.PREVIOUS:
-                if (--mCurrentTrackIndex < 0) {
+                if ((mCurrentTrackIndex - 1) < 0) {
                     Toast.makeText(getActivity(), "You are currently listening to first track!",
                             Toast.LENGTH_LONG).show();
                     return;
                 }
-                mCurrentTrack = mMusicItems.get(mCurrentTrackIndex);
+                mCurrentTrack = mMusicItems.get(--mCurrentTrackIndex);
                 mPlayerAdapter.reset();
+                mPlayerAdapter.loadMedia(mCurrentTrack);
+                if (mIsPlaying){ mPlayerAdapter.play();}
                 break;
 
             case Playback.CURRENT:
-//                mPlayerAdapter.play();
+                if (mIsPlaying) {
+                    mPlayerAdapter.pause();
+                }else {
+                    mPlayerAdapter.play();
+                }
+                mIsPlaying = !mIsPlaying;
                 break;
+
             case Playback.NEXT:
-                if (++mCurrentTrackIndex >= mMusicItems.size()) {
+                if ((mCurrentTrackIndex + 1) >= mMusicItems.size()) {
                     Toast.makeText(getActivity(), "There is no track remaining in current playlist",
                             Toast.LENGTH_LONG).show();
                     return;
                 }
-                mCurrentTrack = mMusicItems.get(mCurrentTrackIndex);
+                mCurrentTrack = mMusicItems.get(++mCurrentTrackIndex);
                 mPlayerAdapter.reset();
+                mPlayerAdapter.loadMedia(mCurrentTrack);
+                if (mIsPlaying){ mPlayerAdapter.play();}
                 break;
         }
 
-        mPlayerAdapter.loadMedia(mCurrentTrack);
         updateUI();
-        mPlayerAdapter.play();
-
-
     }
 
     /**
@@ -296,13 +350,11 @@ public class PlayerFragment extends Fragment {
         @Override
         public void onPositionChanged(final int position) {
             if (!mUserIsSeeking) {
-//                Log.e(TAG, "onPositionChanged(position): " + position);
 
                 mCircularSeekBar.post(new Runnable() {
                     @Override
                     public void run() {
                         mCircularSeekBar.setProgress(position);
-//                        Log.d(TAG, position + "ms to sec " + TimeConvertor.milliSecondsToTimer(position));
                         mCurrentTimeTextView.setText(TimeConvertor.milliSecondsToTimer(position));
 
                     }
