@@ -3,11 +3,12 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/black_dark</item>
+        <item name="colorPrimaryDark">@color/black_dark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowBackground">@color/black_dark</item>
+        <item name="drawerArrowStyle">@style/BeatBuffActionBarStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -20,4 +21,9 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="playerControlButton" />
+
+    <style name="BeatBuffActionBarStyle" parent="Widget.AppCompat.DrawerArrowToggle" >
+        <item name="color">@color/orange_dark</item>
+    </style>
+
 </resources>

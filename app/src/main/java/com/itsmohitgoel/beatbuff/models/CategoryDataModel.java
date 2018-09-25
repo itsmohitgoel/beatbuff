@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class CategoryDataModel {
     private String mHeaderTitle;
+    private String mMusicCategory;
     private ArrayList<CategorySingleItemModel>  mAllItemsInCategory;
 
     public CategoryDataModel() {
@@ -24,5 +25,13 @@ public class CategoryDataModel {
 
     public void setAllItemsInCategory(ArrayList<CategorySingleItemModel> allItemsInCategory) {
         mAllItemsInCategory = allItemsInCategory;
+    }
+
+    public String getMusicCategory() {
+        return mMusicCategory;
+    }
+
+    public void setMusicCategory(String musicCategory) {
+        mMusicCategory = musicCategory;
     }
 }

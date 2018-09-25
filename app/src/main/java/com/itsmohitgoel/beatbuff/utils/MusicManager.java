@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.itsmohitgoel.beatbuff.R;
+import com.itsmohitgoel.beatbuff.fragments.CategoryListFragment;
 import com.itsmohitgoel.beatbuff.models.CategoryDataModel;
 import com.itsmohitgoel.beatbuff.models.CategorySingleItemModel;
 import com.itsmohitgoel.beatbuff.models.MusicItem;
@@ -77,12 +78,14 @@ public class MusicManager {
     public CategoryDataModel getAllGenreData() {
         CategoryDataModel genreDataModel = new CategoryDataModel();
         genreDataModel.setHeaderTitle("Browse By Genre");
+        genreDataModel.setMusicCategory(CategoryListFragment.MusicCategory.GENRE);
 
         ArrayList<CategorySingleItemModel> genreItemsList = new ArrayList<>();
         String[] genreTitles = new String[]{"Rock", "Pop", "HipHop", "Electronic", "Folk", "Metal"};
         int[] genreImageResources = new int[]{
                 R.drawable.genre_rock, R.drawable.genre_pop, R.drawable.genre_hiphop,
                 R.drawable.genre_electronic, R.drawable.genre_folk, R.drawable.genre_metal};
+
         for (int i = 0; i < genreImageResources.length; i++) {
             genreItemsList.add(new CategorySingleItemModel(genreTitles[i], genreImageResources[i]));
         }
@@ -95,6 +98,7 @@ public class MusicManager {
     public CategoryDataModel getAllArtistData() {
         CategoryDataModel artistDataModel = new CategoryDataModel();
         artistDataModel.setHeaderTitle("Browse By Artists");
+        artistDataModel.setMusicCategory(CategoryListFragment.MusicCategory.ARTIST);
 
         ArrayList<CategorySingleItemModel> artistsItemsList = new ArrayList<>();
         String[] artistTitles = new String[]{"Charlie Puth", "Sia", "Chainsmokers",
@@ -116,6 +120,7 @@ public class MusicManager {
     public CategoryDataModel getAllAlbumsData() {
         CategoryDataModel albumsDataModel = new CategoryDataModel();
         albumsDataModel.setHeaderTitle("Top Albums");
+        albumsDataModel.setMusicCategory(CategoryListFragment.MusicCategory.ALBUMS);
 
         ArrayList<CategorySingleItemModel> albumItemsList = new ArrayList<>();
         String[] albumTitles = new String[]{"Voicenotes", "This is Acting", "Collage",
@@ -136,17 +141,18 @@ public class MusicManager {
     public CategoryDataModel getAllSongsData() {
         CategoryDataModel allSongsDataModel = new CategoryDataModel();
         allSongsDataModel.setHeaderTitle("All Songs");
+        allSongsDataModel.setMusicCategory(CategoryListFragment.MusicCategory.ALL_SONGS);
 
         ArrayList<CategorySingleItemModel> allSongsItemsList = new ArrayList<>();
         String[] albumTitles = new String[]{"Attention", "Cheap Thrills", "Closer",
                 "Darkside", "Faded", "Friends", "Girls Like You", "How Long",
-                 "No Brainer", "Side Effects", "Wolves"};
+                "No Brainer", "Side Effects", "Wolves"};
         int[] albumImageResources = new int[]{
                 R.drawable.artist_charlie, R.drawable.artist_sia, R.drawable.artist_chainsmokers,
                 R.drawable.alan_walker, R.drawable.artist_alan_walker,
                 R.drawable.artist_marshmellow, R.drawable.artist_maroon5,
-        R.drawable.artist_charlie, R.drawable.artist_justine, R.drawable.artist_chainsmokers,
-        R.drawable.artist_selena};
+                R.drawable.artist_charlie, R.drawable.artist_justine, R.drawable.artist_chainsmokers,
+                R.drawable.artist_selena};
         for (int i = 0; i < albumImageResources.length; i++) {
             allSongsItemsList.add(new CategorySingleItemModel(albumTitles[i], albumImageResources[i]));
         }

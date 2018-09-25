@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.itsmohitgoel.beatbuff.adapters.CategoriesDataAdapter;
 import com.itsmohitgoel.beatbuff.R;
 import com.itsmohitgoel.beatbuff.models.CategoryDataModel;
-import com.itsmohitgoel.beatbuff.models.CategorySingleItemModel;
 import com.itsmohitgoel.beatbuff.utils.MusicManager;
 
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomeFragment extends Fragment {
+    public static final String TAG = HomeFragment.class.getCanonicalName();
 
     @BindView(R.id.all_categories_recycler_view)
     RecyclerView mAllCategoriesRecyclerView;
@@ -42,10 +42,9 @@ public class HomeFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
-        createDummyData();
+        prepareOuterListData();
 
         mAllCategoriesRecyclerView.setHasFixedSize(true);
-        //todo: create and set adapter
         CategoriesDataAdapter outerListAdapter = new CategoriesDataAdapter(getActivity(), mAllCategoriesData);
         mAllCategoriesRecyclerView.setLayoutManager(new LinearLayoutManager(
                 getActivity(), LinearLayoutManager.VERTICAL, false
@@ -58,40 +57,17 @@ public class HomeFragment extends Fragment {
         return new HomeFragment();
     }
 
-    private void createDummyData() {
-        for (int i = 1; i <= 5; i++) {
+    private void prepareOuterListData() {
+        MusicManager musicManager = MusicManager.getInstance(getActivity());
+        CategoryDataModel genreData = musicManager.getAllGenreData();
+        CategoryDataModel artistData = musicManager.getAllArtistData();
+        CategoryDataModel albumsData = musicManager.getAllAlbumsData();
+        CategoryDataModel allSongsData = musicManager.getAllSongsData();
 
-            if (i == 1) {
-                CategoryDataModel genreData = MusicManager.getInstance(getActivity()).getAllGenreData();
-                mAllCategoriesData.add(genreData);
-                continue;
-            }if (i == 2) {
-                CategoryDataModel artistData = MusicManager.getInstance(getActivity()).getAllArtistData();
-                mAllCategoriesData.add(artistData);
-                continue;
-            }if (i == 3) {
-                CategoryDataModel albumsData = MusicManager.getInstance(getActivity()).getAllAlbumsData();
-                mAllCategoriesData.add(albumsData);
-                continue;
-            }if (i == 4) {
-                CategoryDataModel allSongsData = MusicManager.getInstance(getActivity()).getAllSongsData();
-                mAllCategoriesData.add(allSongsData);
-                continue;
-            }
-
-            CategoryDataModel categoryDataModel = new CategoryDataModel();
-            categoryDataModel.setHeaderTitle("Section " + i);
-
-            ArrayList<CategorySingleItemModel> singleItemsList = new ArrayList<>();
-
-            for (int j = 0; j <= 5; j++) {
-                singleItemsList.add(new CategorySingleItemModel("Item " + j, R.drawable.alan_walker));
-            }
-
-            categoryDataModel.setAllItemsInCategory(singleItemsList);
-
-            mAllCategoriesData.add(categoryDataModel);
-        }
+        mAllCategoriesData.add(genreData);
+        mAllCategoriesData.add(artistData);
+        mAllCategoriesData.add(albumsData);
+        mAllCategoriesData.add(allSongsData);
     }
 
 }

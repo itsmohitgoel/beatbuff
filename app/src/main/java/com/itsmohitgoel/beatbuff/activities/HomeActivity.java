@@ -5,18 +5,19 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.itsmohitgoel.beatbuff.R;
-import com.itsmohitgoel.beatbuff.fragments.AlbumFragment;
-import com.itsmohitgoel.beatbuff.fragments.AllSongsFragment;
-import com.itsmohitgoel.beatbuff.fragments.ArtistFragment;
-import com.itsmohitgoel.beatbuff.fragments.GenreFragment;
+import com.itsmohitgoel.beatbuff.fragments.CategoryListFragment;
+import com.itsmohitgoel.beatbuff.fragments.CategoryListFragment.MusicCategory;
 import com.itsmohitgoel.beatbuff.fragments.HomeFragment;
-import com.itsmohitgoel.beatbuff.fragments.PlaylistFragment;
+
 
 public class HomeActivity extends SingleFragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,7 +41,6 @@ public class HomeActivity extends SingleFragmentActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -57,7 +57,7 @@ public class HomeActivity extends SingleFragmentActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+                super.onBackPressed();
         }
     }
 
@@ -65,7 +65,14 @@ public class HomeActivity extends SingleFragmentActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+        MenuItem searchItem = menu.findItem(R.id.search_menu_item);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        ImageView searchButtonImageView = (ImageView) searchView
+                .findViewById(android.support.v7.appcompat.R.id.search_button);
+        searchButtonImageView.setImageResource(R.drawable.ic_search);
         return true;
+
     }
 
     @Override
@@ -76,7 +83,7 @@ public class HomeActivity extends SingleFragmentActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.search_menu_item) {
             return true;
         }
 
@@ -93,19 +100,16 @@ public class HomeActivity extends SingleFragmentActivity
                 fragment = HomeFragment.newInstance();
                 break;
             case R.id.genre_fragment:
-                fragment = GenreFragment.newInstance();
+                fragment = CategoryListFragment.newInstance(MusicCategory.GENRE);
                 break;
             case R.id.artist_fragment:
-                fragment = ArtistFragment.newInstance();
+                fragment = CategoryListFragment.newInstance(MusicCategory.ARTIST);
                 break;
             case R.id.album_fragment:
-                fragment = AlbumFragment.newInstance();
+                fragment = CategoryListFragment.newInstance(MusicCategory.ALBUMS);
                 break;
             case R.id.all_songs_fragment:
-                fragment = AllSongsFragment.newInstance();
-                break;
-            case R.id.playlist_fragment:
-                fragment = PlaylistFragment.newInstance();
+                fragment = CategoryListFragment.newInstance(MusicCategory.ALL_SONGS);
                 break;
             default:
                 break;
@@ -113,10 +117,12 @@ public class HomeActivity extends SingleFragmentActivity
 
         mFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
                 .commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
