@@ -6,31 +6,34 @@
     android:layout_height="match_parent"
     tools:layout_editor_absoluteY="81dp">
 
-    <TextView
-        android:id="@+id/dummy_textview2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Home Fragment Textview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/frameLayout"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/image_slider_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="160dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dummy_textview2">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+
+    </android.support.v4.view.ViewPager>
+
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/circle_page_indicator"
+        android:layout_width="411dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom"
+        android:padding="10dip"
+        app:centered="true"
+        app:fillColor="@color/white"
+        app:strokeColor="@color/zero_opacity"
+        app:layout_constraintBottom_toBottomOf="@id/image_slider_view_pager"
+        app:layout_constraintEnd_toEndOf="@id/image_slider_view_pager"
+        app:layout_constraintStart_toStartOf="@id/image_slider_view_pager"
+        app:pageColor="@color/gray_dark"
+        app:snap="false" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/all_categories_recycler_view"
@@ -39,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+        app:layout_constraintTop_toBottomOf="@+id/image_slider_view_pager">
 
     </android.support.v7.widget.RecyclerView>
 </android.support.constraint.ConstraintLayout>

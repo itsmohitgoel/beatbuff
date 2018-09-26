@@ -1,9 +1,11 @@
 package com.itsmohitgoel.beatbuff.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,10 +14,15 @@ import android.view.ViewGroup;
 
 import com.itsmohitgoel.beatbuff.adapters.CategoriesDataAdapter;
 import com.itsmohitgoel.beatbuff.R;
+import com.itsmohitgoel.beatbuff.adapters.ImageSliderAdapter;
 import com.itsmohitgoel.beatbuff.models.CategoryDataModel;
+import com.itsmohitgoel.beatbuff.models.ImageModel;
 import com.itsmohitgoel.beatbuff.utils.MusicManager;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,13 +32,25 @@ public class HomeFragment extends Fragment {
 
     @BindView(R.id.all_categories_recycler_view)
     RecyclerView mAllCategoriesRecyclerView;
+    @BindView(R.id.image_slider_view_pager)
+    ViewPager mViewPager;
+    @BindView(R.id.circle_page_indicator)
+    CirclePageIndicator mCirclePageIndicator;
 
     private ArrayList<CategoryDataModel> mAllCategoriesData;
+    private int mCurrentPage = 0;
+    private int NUM_PAGES = 0;
+    private ArrayList<ImageModel> mImageModels;
+    private int[] mSliderImages = new int[]{R.drawable.img_poster1, R.drawable.img_poster2,
+            R.drawable.img_poster3, R.drawable.img_poster4, R.drawable.img_poster5};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAllCategoriesData = new ArrayList<CategoryDataModel>();
+        mImageModels = new ArrayList<>();
+        mImageModels = populateSliderImages();
+
     }
 
     @Nullable
@@ -50,6 +69,8 @@ public class HomeFragment extends Fragment {
                 getActivity(), LinearLayoutManager.VERTICAL, false
         ));
         mAllCategoriesRecyclerView.setAdapter(outerListAdapter);
+
+        initializeImageSlider();
         return rootView;
     }
 
@@ -70,5 +91,63 @@ public class HomeFragment extends Fragment {
         mAllCategoriesData.add(allSongsData);
     }
 
+    private ArrayList<ImageModel> populateSliderImages() {
+        ArrayList<ImageModel> list = new ArrayList<>();
+
+        for (int i = 0 ; i < mSliderImages.length; i++) {
+            ImageModel imageModel = new ImageModel();
+            imageModel.setImageDrawable(mSliderImages[i]);
+            list.add(imageModel);
+        }
+
+        return list;
+    }
+
+    private void initializeImageSlider() {
+        mViewPager.setAdapter(new ImageSliderAdapter(getActivity(), mImageModels));
+        mCirclePageIndicator.setViewPager(mViewPager);
+
+        final float density = getResources().getDisplayMetrics().density;
+
+        mCirclePageIndicator.setRadius(5 * density);
+
+        NUM_PAGES = mImageModels.size();
+
+        final Handler handler = new Handler();
+        final Runnable update = new Runnable() {
+            @Override
+            public void run() {
+                if (mCurrentPage == NUM_PAGES) {
+                    mCurrentPage = 0;
+                }
+                mViewPager.setCurrentItem(mCurrentPage++, true);
+            }
+        };
+
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(update);
+            }
+        }, 500, 1000);
+
+        mCirclePageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mCurrentPage = position;
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
 }
 
