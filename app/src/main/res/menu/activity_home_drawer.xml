@@ -6,23 +6,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/home_fragment"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_homepage"
             android:title="BeatBuff(Home)" />
         <item
             android:id="@+id/genre_fragment"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_genres"
             android:title="Genre" />
         <item
             android:id="@+id/artist_fragment"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_artists"
             android:title="Artists" />
         <item
             android:id="@+id/album_fragment"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_albums"
             android:title="Albums" />
         <item
             android:id="@+id/all_songs_fragment"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_all_songs"
             android:title="All Songs" />
     </group>
 
