@@ -6,6 +6,7 @@
     android:id="@+id/player_root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
     android:orientation="vertical">
 
 
@@ -84,7 +85,7 @@
         android:id="@+id/current_time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:text="00:00"
         android:textColor="@color/cyan_bright"
         android:textSize="18sp"
@@ -242,7 +243,7 @@
         android:id="@+id/favourite_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
@@ -269,12 +270,13 @@
 
     <TextView
         android:id="@+id/track_title_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
+        android:gravity="center_horizontal"
         android:maxLines="1"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
@@ -383,14 +385,15 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Stay With me"
         android:textColor="@color/matte_clay"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/previous_track_info_text_view"
         app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
         android:id="@+id/next_track_title_text_view"
@@ -398,21 +401,22 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Rude"
         android:textColor="@color/matte_clay"
         android:textDirection="rtl"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/next_track_info_text_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView4" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <TextView
         android:id="@+id/previous_track_info_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="24dp"
         android:ellipsize="end"
@@ -420,15 +424,15 @@
         android:text="Sam Smith"
         android:textColor="@color/matte_clay"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/previous_track_title_text_view" />
 
     <TextView
         android:id="@+id/next_track_info_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:ellipsize="end"
@@ -437,9 +441,10 @@
         android:textColor="@color/matte_clay"
         android:textDirection="rtl"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView4" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/next_track_title_text_view" />
 
 
 </android.support.constraint.ConstraintLayout>

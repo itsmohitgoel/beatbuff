@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.PlayerActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/PlayerActivityTheme"/>
     </application>
 
 </manifest>

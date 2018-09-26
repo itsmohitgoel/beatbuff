@@ -13,6 +13,8 @@
     <color name="zero_opacity">#00828282</color>
     <color name="white">#ebecec</color>
     <color name="orange_dark">#be6d20</color>
-    <color name="black_dark">#121314</color>
     <color name="gray_dark">#424242</color>
+    <color name="black_dark">#121314</color>
+    <color name="black_dark_medium_opacity">#00060b00</color>
+    <color name="black_dark_low_opacity">#00060b00</color>
 </resources>
