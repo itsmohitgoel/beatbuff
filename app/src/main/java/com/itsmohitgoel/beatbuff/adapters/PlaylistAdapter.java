@@ -1,6 +1,8 @@
 package com.itsmohitgoel.beatbuff.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -73,7 +75,13 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             artistTextView.setText(musicItem.getArtistName());
             durationTextView.setText(musicItem.getDuration());
             titleTextView.setText(musicItem.getTitle());
-            trackImageView.setImageBitmap(musicItem.getCoverArt());
+            if (musicItem.getCoverArt() != null) {
+                trackImageView.setImageBitmap(musicItem.getCoverArt());
+            }else {
+                Bitmap tempBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.alan_walker);
+                trackImageView.setImageBitmap(tempBitmap);
+
+            }
             numberTextView.setText(++position + "");
         }
     }

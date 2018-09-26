@@ -1,6 +1,7 @@
 package com.itsmohitgoel.beatbuff.fragments;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
@@ -227,7 +228,11 @@ public class PlayerFragment extends Fragment {
 
     private void updateUI() {
         Bitmap albumArtImage = mCurrentTrack.getCoverArt();
-        mProfileImageView.setImageBitmap(albumArtImage);
+        if (albumArtImage != null) {
+            mProfileImageView.setImageBitmap(albumArtImage);
+        }else {
+            albumArtImage = BitmapFactory.decodeResource(getResources(), R.drawable.alan_walker);
+        }
 
         Bitmap albumArtBlurImage = Blur.fastblur(getActivity(), albumArtImage, 5);
         mBackgroundImageView.setImageBitmap(albumArtBlurImage);

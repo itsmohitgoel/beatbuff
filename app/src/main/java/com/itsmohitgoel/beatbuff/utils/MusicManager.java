@@ -193,7 +193,12 @@ public class MusicManager {
         duration = TimeConvertor.milliSecondsToTimer(Integer.parseInt(duration));
         String title = mData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
         byte art[] = mData.getEmbeddedPicture();
-        Bitmap coverImage = BitmapFactory.decodeByteArray(art, 0, art.length);
+        Bitmap coverImage;
+        if (art != null && art.length > 0) {
+            coverImage = BitmapFactory.decodeByteArray(art, 0, art.length);
+        } else {
+            coverImage = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.alan_walker);
+        }
 
         musicItem.setTitle(title);
         musicItem.setArtistName(artist);
