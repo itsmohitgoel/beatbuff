@@ -26,7 +26,7 @@ import com.itsmohitgoel.beatbuff.utils.Blur;
 import com.itsmohitgoel.beatbuff.utils.CircularSeekBar;
 import com.itsmohitgoel.beatbuff.utils.MediaPlayerHolder;
 import com.itsmohitgoel.beatbuff.utils.MusicManager;
-import com.itsmohitgoel.beatbuff.utils.TimeConvertor;
+import com.itsmohitgoel.beatbuff.utils.TimeConverter;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -307,7 +307,7 @@ public class PlayerFragment extends Fragment {
         switch (trackNumber) {
             case Playback.PREVIOUS:
                 if ((mCurrentTrackIndex - 1) < 0) {
-                    Toast.makeText(getActivity(), "You are currently listening to first track!",
+                    Toast.makeText(getActivity(), R.string.toast_first_track,
                             Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -328,7 +328,7 @@ public class PlayerFragment extends Fragment {
 
             case Playback.NEXT:
                 if ((mCurrentTrackIndex + 1) >= mMusicItems.size()) {
-                    Toast.makeText(getActivity(), "There is no track remaining in current playlist",
+                    Toast.makeText(getActivity(), R.string.toast_last_track,
                             Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -349,7 +349,7 @@ public class PlayerFragment extends Fragment {
         @Override
         public void onDurationChanged(int duration) {
             mCircularSeekBar.setMax(duration);
-            mTotalTimeTextView.setText(TimeConvertor.milliSecondsToTimer(duration));
+            mTotalTimeTextView.setText(TimeConverter.milliSecondsToTimer(duration));
         }
 
         @Override
@@ -360,7 +360,7 @@ public class PlayerFragment extends Fragment {
                     @Override
                     public void run() {
                         mCircularSeekBar.setProgress(position);
-                        mCurrentTimeTextView.setText(TimeConvertor.milliSecondsToTimer(position));
+                        mCurrentTimeTextView.setText(TimeConverter.milliSecondsToTimer(position));
 
                     }
                 });

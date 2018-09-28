@@ -23,17 +23,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Adapter class for the outer recyclerview in HomeFragment
+ * Adapter class for the outer recycler_view in HomeFragment
  */
 
 public class CategoriesDataAdapter extends RecyclerView.Adapter<CategoriesDataAdapter.CategoryRowHolder> {
 
     private Context mContext;
-    private ArrayList<CategoryDataModel> mAllCatogiesDataList;
+    private ArrayList<CategoryDataModel> mAllCategoriesDataList;
 
     public CategoriesDataAdapter(Context context, ArrayList<CategoryDataModel> categoryDataModelArrayList) {
         mContext = context;
-        mAllCatogiesDataList = categoryDataModelArrayList;
+        mAllCategoriesDataList = categoryDataModelArrayList;
     }
 
     @NonNull
@@ -42,18 +42,17 @@ public class CategoriesDataAdapter extends RecyclerView.Adapter<CategoriesDataAd
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View v = inflater.inflate(R.layout.categories_list_item, parent, false);
 
-        CategoryRowHolder categoryRowHolder = new CategoryRowHolder(v);
-        return categoryRowHolder;
+        return new CategoryRowHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoryRowHolder holder, int position) {
-        holder.bindCategoryData(mAllCatogiesDataList.get(position));
+        holder.bindCategoryData(mAllCategoriesDataList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return (mAllCatogiesDataList != null ? mAllCatogiesDataList.size() : 0);
+        return (mAllCategoriesDataList != null ? mAllCategoriesDataList.size() : 0);
     }
 
     /**

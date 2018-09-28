@@ -86,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="00:00"
+        android:text="@string/player_initial_timestamp"
         android:textColor="@color/cyan_bright"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/circle_image_view"
@@ -152,7 +152,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/boongaloo"
-        android:text="Now Playing"
+        android:text="@string/player_title"
         android:textColor="@color/cyan_bright"
         android:textSize="48sp"
         app:layout_constraintEnd_toStartOf="@+id/circular_seekbar"
@@ -261,7 +261,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="04:30"
+        tools:text="@string/player_total_time"
         android:textColor="@color/cyan_bright"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/repeat_button"
@@ -299,7 +299,7 @@
         android:maxLines="1"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
-        android:text="Lorde"
+        android:text="@string/player_dummy_text1"
         android:textColor="@color/cyan_bright"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
@@ -320,7 +320,7 @@
         app:layout_constraintStart_toEndOf="@+id/circle_image_view"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/track_info_text_view"
-        app:srcCompat="@drawable/ic_star" />
+        android:src="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -332,7 +332,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toBottomOf="@+id/track_info_text_view"
-        app:srcCompat="@drawable/ic_star" />
+        android:src="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -345,7 +345,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toBottomOf="@+id/track_info_text_view"
-        app:srcCompat="@drawable/ic_star" />
+        android:src="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -358,7 +358,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/track_info_text_view"
-        app:srcCompat="@drawable/ic_star" />
+        android:src="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -370,7 +370,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/track_info_text_view"
-        app:srcCompat="@drawable/ic_star" />
+        android:src="@drawable/ic_star" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline7"
@@ -388,7 +388,7 @@
         android:layout_marginTop="24dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Stay With me"
+        android:text="@string/player_dummy_text2"
         android:textColor="@color/matte_clay"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/imageView2"
@@ -404,7 +404,7 @@
         android:layout_marginTop="24dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Rude"
+        android:text="@string/player_dummy_text3"
         android:textColor="@color/matte_clay"
         android:textDirection="rtl"
         android:textSize="18sp"
@@ -421,7 +421,7 @@
         android:layout_marginStart="24dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Sam Smith"
+        android:text="@string/player_dummy_text4"
         android:textColor="@color/matte_clay"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/imageView2"
@@ -437,7 +437,7 @@
         android:layout_marginStart="24dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Magic"
+        android:text="@string/player_dummy_text5"
         android:textColor="@color/matte_clay"
         android:textDirection="rtl"
         android:textSize="12sp"

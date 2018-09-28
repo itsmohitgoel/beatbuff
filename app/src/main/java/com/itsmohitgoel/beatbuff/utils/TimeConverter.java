@@ -1,6 +1,6 @@
 package com.itsmohitgoel.beatbuff.utils;
 
-public class TimeConvertor {
+public class TimeConverter {
     public static String milliSecondsToTimer(int milliSeconds) {
         StringBuffer timerFormatString = new StringBuffer();
         StringBuffer minutesString;

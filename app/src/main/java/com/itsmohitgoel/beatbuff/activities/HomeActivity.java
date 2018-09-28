@@ -5,7 +5,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -18,10 +17,20 @@ import com.itsmohitgoel.beatbuff.fragments.CategoryListFragment;
 import com.itsmohitgoel.beatbuff.fragments.CategoryListFragment.MusicCategory;
 import com.itsmohitgoel.beatbuff.fragments.HomeFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class HomeActivity extends SingleFragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     @Override
     public Fragment createFragment() {
@@ -37,27 +46,23 @@ public class HomeActivity extends SingleFragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set a toolbar to replace the Actionbar.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
         } else {
-                super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
@@ -120,8 +125,7 @@ public class HomeActivity extends SingleFragmentActivity
                 .addToBackStack(null)
                 .commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

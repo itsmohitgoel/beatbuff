@@ -1,9 +1,7 @@
 package com.itsmohitgoel.beatbuff.utils;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.util.Log;
 
 import com.itsmohitgoel.beatbuff.listeners.PlaybackInfoListener;
@@ -162,7 +160,6 @@ public class MediaPlayerHolder implements PlayerAdapter {
     }
 
     private void updateProgressCallbackTask() {
-//        Log.d(TAG, " updaeProgressCAllbackTAsk");
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             int currentPosition = mMediaPlayer.getCurrentPosition();
             if (mPlaybackInfoListener != null) {
@@ -171,13 +168,13 @@ public class MediaPlayerHolder implements PlayerAdapter {
         }
     }
 
-    private void stopUpdatingCallbackWithPosition(boolean resetUIPlayackPosition) {
-        Log.d(TAG, " stopUpdatingCallbackWithPosition(" + resetUIPlayackPosition + ")");
+    private void stopUpdatingCallbackWithPosition(boolean resetUIPlayBackPosition) {
+        Log.d(TAG, " stopUpdatingCallbackWithPosition(" + resetUIPlayBackPosition + ")");
         if (mExecutor != null) {
             mExecutor.shutdownNow();
             mExecutor = null;
             mSeekbarPositionUpdateTask = null;
-            if (resetUIPlayackPosition && mPlaybackInfoListener != null) {
+            if (resetUIPlayBackPosition && mPlaybackInfoListener != null) {
                 mPlaybackInfoListener.onPositionChanged(0);
             }
         }

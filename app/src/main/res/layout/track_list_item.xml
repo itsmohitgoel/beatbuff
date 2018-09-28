@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,7 +12,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="1"
+        tools:text="1"
         android:textSize="16sp"
         android:textColor="@color/matte_clay_dull"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +46,7 @@
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Voices of Winter"
+        tools:text="Voices of Winter"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/imageView9"
         app:layout_constraintStart_toEndOf="@+id/cardview1"
@@ -59,7 +60,7 @@
         android:layout_marginStart="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="The Beauty of Gelia"
+        tools:text="The Beauty of Gelia"
         android:textColor="@color/matte_clay_dull"
         app:layout_constraintEnd_toStartOf="@+id/imageView9"
         app:layout_constraintStart_toEndOf="@+id/cardview1"
@@ -83,7 +84,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
         android:padding="4dp"
-        android:text="03:44"
+        tools:text="03:44"
         android:textColor="@color/matte_clay_dull"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

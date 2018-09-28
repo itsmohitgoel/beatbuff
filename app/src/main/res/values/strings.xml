@@ -6,4 +6,74 @@
     <string name="nav_header_subtitle">Login or Register</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_search">Search</string>
+
+    <!--Home Screen String resources-->
+    <string name="label_header_genre">Browse By Genre</string>
+    <string name="label_header_artists">Browse By Artists</string>
+    <string name="label_header_albums">Top Albums</string>
+    <string name="label_header_all_songs">All Songs</string>
+
+    <!--Toast messages-->
+    <string name="toast_first_track">You are currently listening to first track!</string>
+    <string name="toast_last_track">There is no track remaining in current playlist</string>
+
+    <string-array name="title_genres_array">
+        <item>Rock</item>
+        <item>Pop</item>
+        <item>HipHop</item>
+        <item>Electronic</item>
+        <item>Folk</item>
+        <item>Metal</item>
+    </string-array>
+
+    <string-array name="title_artists_array">
+        <item>Charlie Puth</item>
+        <item>Sia</item>
+        <item>Chainsmokers</item>
+        <item>Alan Walker</item>
+        <item>Marshmello</item>
+        <item>Maroon 5</item>
+        <item>Drake</item>
+        <item>Justine Bieber</item>
+        <item>Selena</item>
+    </string-array>
+
+    <string-array name="title_albums_array">
+        <item>Voicenotes</item>
+        <item>This is Acting</item>
+        <item>Collage</item>
+        <item>Speak Your Mind</item>
+        <item>Red Pill Blues</item>
+        <item>How Long</item>
+        <item>Wolves</item>
+    </string-array>
+
+    <string-array name="title_songs_array">
+        <item>Attention</item>
+        <item>Cheap Thrills</item>
+        <item>Closer</item>
+        <item>Darkside</item>
+        <item>Faded</item>
+        <item>Friends</item>
+        <item>Girls Like You</item>
+        <item>How Long</item>
+        <item>No Brainer</item>
+        <item>Side Effects</item>
+        <item>Wolves</item>
+    </string-array>
+
+    <!--Player Screen Strings-->
+    <string name="player_initial_timestamp">00:00</string>
+    <string name="player_title">Now Playing</string>
+    <string name="player_total_time">04:30</string>
+    <string name="player_dummy_text1">Lorde</string>
+    <string name="player_dummy_text2">Stay With me</string>
+    <string name="player_dummy_text3">Rude</string>
+    <string name="player_dummy_text4">Sam Smith</string>
+    <string name="player_dummy_text5">Magic</string>
+
+    <!-- Category list screen-->
+    <string name="category_list_total_tracks">14 Tracks</string>
+    <string name="category_list_button_play">Play</string>
+    <string name="category_list_label">Tracklist</string>
 </resources>

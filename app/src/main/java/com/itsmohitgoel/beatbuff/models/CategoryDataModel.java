@@ -1,6 +1,5 @@
 package com.itsmohitgoel.beatbuff.models;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class CategoryDataModel {

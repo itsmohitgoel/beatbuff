@@ -33,8 +33,7 @@ public class CategoryListDataAdapter extends RecyclerView.Adapter<CategoryListDa
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View v = inflater.inflate(R.layout.horizontal_single_card_list_item, parent, false);
 
-        SingleItemRowHolder singleItemRowHolder = new SingleItemRowHolder(v);
-        return singleItemRowHolder;
+        return new SingleItemRowHolder(v);
     }
 
     @Override
