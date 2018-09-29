@@ -27,6 +27,12 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Home Screen Fragment Hosting :-
+ * 1. Image Slider to display upcoming music events in nearby cities.
+ * 2. 4 Horizontal recycler views to show music by Genre/Albums/Artists/All Songs
+ * 3. Horizontal recycler views are nested inside single vertical RecylerView.
+ */
 public class HomeFragment extends Fragment {
     public static final String TAG = HomeFragment.class.getCanonicalName();
 

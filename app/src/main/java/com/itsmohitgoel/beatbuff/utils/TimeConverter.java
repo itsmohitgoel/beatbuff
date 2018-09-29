@@ -1,6 +1,16 @@
 package com.itsmohitgoel.beatbuff.utils;
 
+/**
+ * Utility class handling time conversions
+ */
 public class TimeConverter {
+
+    /**
+     * Converts milliseconds to minutes and seconds individually
+     * and together
+     * @param milliSeconds
+     * @return String representing time eg 70000 to 01:10
+     */
     public static String milliSecondsToTimer(int milliSeconds) {
         StringBuffer timerFormatString = new StringBuffer();
         StringBuffer minutesString;

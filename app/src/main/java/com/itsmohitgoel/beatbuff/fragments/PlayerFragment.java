@@ -36,6 +36,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * This class creates a UI that allows the user to play, pause, and stop
+ * media playback. And it creates a MediaPlayerHolder object.
+ */
 public class PlayerFragment extends Fragment {
     private static final String TAG = PlayerFragment.class.getSimpleName();
 
@@ -241,6 +245,7 @@ public class PlayerFragment extends Fragment {
         mTrackTitleTextView.setText(mCurrentTrack.getTitle());
         mTrackInfoTextView.setText(mCurrentTrack.getArtistName());
 
+        // Show Previous and next track info.
         if (mCurrentTrackIndex == 0) {
             mPreviousTrackInfoTextView.setVisibility(View.GONE);
             mPreviousTrackTitleTextView.setVisibility(View.GONE);
@@ -303,6 +308,10 @@ public class PlayerFragment extends Fragment {
         });
     }
 
+    /**
+     * plays the previous,current or next song in the playlist, if any
+     * @param trackNumber
+     */
     private void playTrack(@Playback int trackNumber) {
         switch (trackNumber) {
             case Playback.PREVIOUS:
@@ -343,7 +352,9 @@ public class PlayerFragment extends Fragment {
     }
 
     /**
-     * Callback listener to receive callback on events like progress change, seek position
+     * Callback listener to receive callback on events like progress change, seek position.
+     * This allows MediaPlayerHolder to update itself when media duration and
+     * progress changes.
      */
     public class PlaybackListener extends PlaybackInfoListener {
         @Override

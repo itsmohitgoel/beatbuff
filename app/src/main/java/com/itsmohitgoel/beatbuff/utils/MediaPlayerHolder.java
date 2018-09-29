@@ -13,6 +13,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class implements an interface 'PlayerAdapter' which
+ * allows the PlayerFragment to control playback functions.
+ */
 public class MediaPlayerHolder implements PlayerAdapter {
     private static final String TAG = MediaPlayerHolder.class.getSimpleName();
 
@@ -87,7 +91,6 @@ public class MediaPlayerHolder implements PlayerAdapter {
             Log.d(TAG, "reset()");
         if (mMediaPlayer != null) {
             mMediaPlayer.reset();
-//            loadMedia(mResourceId);
         }
     }
 
@@ -96,16 +99,6 @@ public class MediaPlayerHolder implements PlayerAdapter {
         if (mMediaPlayer != null) {
             mMediaPlayer.seekTo(position);
         }
-    }
-
-    @Override
-    public void previous() {
-
-    }
-
-    @Override
-    public void next() {
-
     }
 
     public void setPlaybackInfoListener(PlaybackInfoListener playbackInfoListener) {
@@ -122,6 +115,9 @@ public class MediaPlayerHolder implements PlayerAdapter {
         }
     }
 
+    /**
+     * Initialize Media player and define listeners on it.
+     */
     private void initializeMediaPlayer() {
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
@@ -136,6 +132,9 @@ public class MediaPlayerHolder implements PlayerAdapter {
         }
     }
 
+    /**
+     * Provide visual feedback as audio playback progresses
+     */
     private void startUpdatingCallbackWithPosition() {
         if (mExecutor == null) {
             mExecutor = Executors.newSingleThreadScheduledExecutor();
@@ -168,6 +167,9 @@ public class MediaPlayerHolder implements PlayerAdapter {
         }
     }
 
+    /**
+     * Update Player Screen's UI as playback stops
+     */
     private void stopUpdatingCallbackWithPosition(boolean resetUIPlayBackPosition) {
         Log.d(TAG, " stopUpdatingCallbackWithPosition(" + resetUIPlayBackPosition + ")");
         if (mExecutor != null) {

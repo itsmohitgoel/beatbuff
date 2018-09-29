@@ -56,15 +56,10 @@ public class MusicManager {
         return mMusicItems;
     }
 
-    public MusicItem getMusicItem(UUID uuid) {
-        for (MusicItem song : mMusicItems) {
-            if (song.getId().equals(uuid)) {
-                return song;
-            }
-        }
-        return null;
-    }
-
+    /**
+     * Returns data for first horizontal recycler view of Home Screen.
+     * i.e Genres list
+     */
     public CategoryDataModel getAllGenreData() {
         CategoryDataModel genreDataModel = new CategoryDataModel();
         genreDataModel.setHeaderTitle(mContext.getString(R.string.label_header_genre));
@@ -86,6 +81,10 @@ public class MusicManager {
         return genreDataModel;
     }
 
+    /**
+     * Returns data for second horizontal recycler view of Home Screen.
+     * i.e Artists list
+     */
     public CategoryDataModel getAllArtistData() {
         CategoryDataModel artistDataModel = new CategoryDataModel();
         artistDataModel.setHeaderTitle(mContext.getString(R.string.label_header_artists));
@@ -108,6 +107,10 @@ public class MusicManager {
         return artistDataModel;
     }
 
+    /**
+     * Returns data for third horizontal recycler view of Home Screen.
+     * i.e Albums list
+     */
     public CategoryDataModel getAllAlbumsData() {
         CategoryDataModel albumsDataModel = new CategoryDataModel();
         albumsDataModel.setHeaderTitle(mContext.getString(R.string.label_header_albums));
@@ -128,6 +131,10 @@ public class MusicManager {
         return albumsDataModel;
     }
 
+    /**
+     * Returns data for fourth horizontal recycler view of Home Screen.
+     * i.e All Songs list
+     */
     public CategoryDataModel getAllSongsData() {
         CategoryDataModel allSongsDataModel = new CategoryDataModel();
         allSongsDataModel.setHeaderTitle(mContext.getString(R.string.label_header_all_songs));
@@ -170,6 +177,12 @@ public class MusicManager {
         return ids;
     }
 
+    /**
+     * Extract Metadata info from .mp3 file and store it in the
+     * pojo passed as argment
+     * @param musicItem need to be filled with metadata
+     * @param resourceId of mp3 tracks present in raw resource folder
+     */
     private void addMetadataInfo(MusicItem musicItem, int resourceId) {
         Uri baseUriForAudioFiles = Uri.parse("android.resource://" + mContext.getPackageName() + "/raw");
         Uri uri = ContentUris.withAppendedId(baseUriForAudioFiles, resourceId);

@@ -13,6 +13,9 @@ import com.itsmohitgoel.beatbuff.models.ImageModel;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter to load images from drawables into slider of Home Screen.
+ */
 public class ImageSliderAdapter extends PagerAdapter {
 
     private ArrayList<ImageModel> mImageModels;

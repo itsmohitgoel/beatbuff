@@ -30,6 +30,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Playlist Fragment which will display the playlist,
+ * based on the user's seletion of music category.
+ */
 public class CategoryListFragment extends Fragment {
     private static final String ARG_CATEGORY = "category";
     public static final String TAG = CategoryListFragment.class.getCanonicalName();
@@ -101,6 +105,11 @@ public class CategoryListFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Extract the cover art from music and build collage image.
+     * @param categoryType
+     * @return
+     */
     private ArrayList<Bitmap> extractImagesFromMusic(String categoryType) {
         int min = 0;
         int max = 5;
