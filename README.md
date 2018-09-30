@@ -20,6 +20,10 @@ This project is developed as Project 4 of Udacity Android Basics Nanodegree unde
 ![frame5](https://user-images.githubusercontent.com/13984005/46253121-6e062a80-c491-11e8-89d6-98b2e62a0c4f.png)
 
 ## Workflow:
+<a href="https://www.youtube.com/watch?v=_Qg_zn-vIpI" target="_blank">
+	<img src="https://user-images.githubusercontent.com/13984005/46254611-6786ab80-c4af-11e8-9cfd-17d1217e3bb6.png" align="BeatBuff - Single Screen App [Working Demo]" />
+</a>
+
 
 #### Resource Credits:
  1. UI inspiration for Now Playing Screen - [Uplabs](https://www.uplabs.com/)
